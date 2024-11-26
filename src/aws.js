@@ -41,7 +41,7 @@ if [[ ! -f config.sh ]]; then
     tar xzf ./actions-runner-linux-\${RUNNER_ARCH}-\${RUNNER_VERSION}.tar.gz
 fi
 
-./config.sh --unattended --url https://github.com/${v.owner}/${v.repo} --token ${v.token} --name $RUNNER_NAME --labels ${v.label}
+./config.sh --unattended --url https://github.com/${v.owner}/${v.repo} --token ${v.token} --name $RUNNER_NAME --labels ${v.label} --disableupdate
 
 # Everything extracted from the tarball and created by config.sh should be owned
 # by the user we want to run the actions-runner service as
