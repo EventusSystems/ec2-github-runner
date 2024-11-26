@@ -41,7 +41,7 @@ if [[ ! -f config.sh ]]; then
     tar xzf ./actions-runner-linux-\${RUNNER_ARCH}-\${RUNNER_VERSION}.tar.gz
 fi
 
-./config.sh --unattended --url https://github.com/${v.owner}/${v.repo} --token ${v.token} --name $RUNNER_NAME --labels ${v.label}
+./config.sh --disableupdate --unattended --url https://github.com/${v.owner}/${v.repo} --token ${v.token} --name $RUNNER_NAME --labels ${v.label}
 
 # Everything extracted from the tarball and created by config.sh should be owned
 # by the user we want to run the actions-runner service as
@@ -67,6 +67,7 @@ async function waitForInstancesRunning(ec2InstanceIDs) {
 async function startEc2Instances(githubRegistrationToken) {
   const ec2 = new AWS.EC2();
 
+  core.info('Disabled GitHub Actions Runner automatic updates...');
   const userData = UserData({
     install: config.github.runner.installDir,
     label: config.github.runner.label,
