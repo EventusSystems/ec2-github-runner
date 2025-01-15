@@ -58,6 +58,8 @@ sudo cp -r node-v20.9.0-linux-x64-glibc-217 /opt/actions-runner/externals/node20
 # Ensure the GitHub runner service runs with the proper libstdc++ version
 sudo sed -i '/\[Service\]/a Environment="LD_LIBRARY_PATH=/opt/gcc-10.3.0/lib64"' /etc/systemd/system/actions.runner.*.service
 
+sudo systemctl daemon-reload
+
 # Start the service
 sudo LD_LIBRARY_PATH="/opt/gcc-10.3.0/lib64" ./svc.sh start
 `;
