@@ -52,8 +52,10 @@ LD_LIBRARY_PATH="/opt/gcc-10.3.0/lib64" ./svc.sh install $RUNNER_USER
 # Shim the built-in node20 with a node20 build compatible with glibc 2.17
 wget https://unofficial-builds.nodejs.org/download/release/v20.9.0/node-v20.9.0-linux-x64-glibc-217.tar.gz
 tar -xzf node-v20.9.0-linux-x64-glibc-217.tar.gz
-sudo rm -r /opt/actions-runner/externals/node20
-sudo cp -r node-v20.9.0-linux-x64-glibc-217 /opt/actions-runner/externals/node20
+
+sudo rm -r $RUNNER_HOME/externals/node20
+
+sudo cp -pr node-v20.9.0-linux-x64-glibc-217 $RUNNER_HOME/externals/node20
 
 # Ensure the GitHub runner service runs with the proper libstdc++ version
 sudo sed -i '/\[Service\]/a Environment="LD_LIBRARY_PATH=/opt/gcc-10.3.0/lib64"' /etc/systemd/system/actions.runner.*.service
