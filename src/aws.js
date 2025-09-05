@@ -41,29 +41,18 @@ if [[ ! -f config.sh ]]; then
     tar xzf ./actions-runner-linux-\${RUNNER_ARCH}-\${RUNNER_VERSION}.tar.gz
 fi
 
-LD_LIBRARY_PATH="/opt/gcc-10.3.0/lib64" ./config.sh --unattended --url https://github.com/${v.owner}/${v.repo} --token ${v.token} --name $RUNNER_NAME --labels ${v.label}
+./config.sh --unattended --url https://github.com/${v.owner}/${v.repo} --token ${v.token} --name $RUNNER_NAME --labels ${v.label}
 
 # Everything extracted from the tarball and created by config.sh should be owned
 # by the user we want to run the actions-runner service as
 chown -R $RUNNER_USER:$RUNNER_GROUP $RUNNER_HOME
 
-LD_LIBRARY_PATH="/opt/gcc-10.3.0/lib64" ./svc.sh install $RUNNER_USER
-
-# Shim the built-in node20 with a node20 build compatible with glibc 2.17
-wget https://unofficial-builds.nodejs.org/download/release/v20.9.0/node-v20.9.0-linux-x64-glibc-217.tar.gz
-tar -xzf node-v20.9.0-linux-x64-glibc-217.tar.gz
-
-sudo rm -r $RUNNER_HOME/externals/node20
-
-sudo cp -pr node-v20.9.0-linux-x64-glibc-217 $RUNNER_HOME/externals/node20
-
-# Ensure the GitHub runner service runs with the proper libstdc++ version
-sudo sed -i '/\[Service\]/a Environment="LD_LIBRARY_PATH=/opt/gcc-10.3.0/lib64"' /etc/systemd/system/actions.runner.*.service
+./svc.sh install $RUNNER_USER
 
 sudo systemctl daemon-reload
 
 # Start the service
-sudo LD_LIBRARY_PATH="/opt/gcc-10.3.0/lib64" ./svc.sh start
+./svc.sh start
 `;
 
 async function waitForInstancesRunning(ec2InstanceIDs) {
